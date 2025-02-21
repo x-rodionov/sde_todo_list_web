@@ -1,4 +1,4 @@
-console.log("starting SDE TODO List Web v1...");
+console.log("starting SDE TODO List Web v1.0.0...");
 const db_filename = "data.bin";
 import fs from "fs";
 import sqlite3 from "better-sqlite3-multiple-ciphers";
