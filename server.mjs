@@ -1,8 +1,9 @@
 console.log("starting SDE TODO List Web v1...");
 const db_filename = "data.bin";
-const fs = require("fs");
+import fs from "fs";
+import sqlite3 from "better-sqlite3-multiple-ciphers";
 const db_file_exists = fs.existsSync(db_filename);
-const db = require("better-sqlite3-multiple-ciphers")(db_filename, {
+const db = sqlite3(db_filename, {
 	//verbose: console.log,
 });
 db.pragma(`cipher='chacha20'`);
