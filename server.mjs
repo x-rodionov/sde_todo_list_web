@@ -1,13 +1,15 @@
 console.log("starting SDE TODO List Web v1.0.0...");
 const db_filename = "data.bin";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 import sqlite3 from "better-sqlite3-multiple-ciphers";
 const db_file_exists = fs.existsSync(db_filename);
 const db = sqlite3(db_filename, {
 	//verbose: console.log,
 });
 db.pragma(`cipher='chacha20'`);
-db.pragma(`key='12345'`);
+db.pragma(`key='${process.env["DB_PASSWORD"]}'`);
 db.pragma(`synchronous=NORMAL`); // NORMAL is a balance between speed (OFF) and safety (FULL)
 db.pragma(`journal_mode=DELETE`);
 if (!db_file_exists) {

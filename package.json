@@ -11,6 +11,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"better-sqlite3-multiple-ciphers": "11.8.1"
+		"better-sqlite3-multiple-ciphers": "11.8.1",
+		"dotenv": "16.4.7"
 	}
 }
