@@ -1,6 +1,7 @@
 console.log("starting SDE TODO List Web v1.0.0...");
 const db_filename = "data.bin";
 import fs from "fs";
+import http from "http";
 import dotenv from "dotenv";
 dotenv.config();
 import sqlite3 from "better-sqlite3-multiple-ciphers";
@@ -39,4 +40,20 @@ try {
 	console.error(`failed to open db`);
 	process.exit(1);
 }
-console.log("ready!")
+const server = http.createServer(async (request, result) => {
+	if (request.method === "GET" && request.url === "/") {
+		result.writeHead(200, {"Content-Type": "text/html; charset=UTF-8;"});
+		result.end("welcome to my app");
+	}
+	else if (request.method === "OPTIONS") {
+		result.writeHead(204, {}); // no content
+		result.end();
+	}
+	else {
+		result.writeHead(404, {"Content-Type": "text/html; charset=UTF-8;"});
+		result.end(`api method not found`);
+	}	
+});
+server.listen(8080, "0.0.0.0", 511, async () => {
+	console.log("ready!")
+});
