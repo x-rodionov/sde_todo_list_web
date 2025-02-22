@@ -41,9 +41,15 @@ try {
 	process.exit(1);
 }
 const server = http.createServer(async (request, result) => {
-	if (request.method === "GET" && request.url === "/") {
+	if (
+		request.method === "GET" && 
+		(request.url === "/" || request.url === "/index.html")
+	) {
 		result.writeHead(200, {"Content-Type": "text/html; charset=UTF-8;"});
-		result.end("welcome to my app");
+		result.end(
+			"<h1>Welcome To My App</h1>\n" +
+			"<p>SDE TODO List Web v1.0.0</p>"
+		);
 	}
 	else if (request.method === "OPTIONS") {
 		result.writeHead(204, {}); // no content
