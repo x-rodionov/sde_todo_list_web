@@ -57,7 +57,7 @@ const server = http.createServer(async (request, result) => {
 	}
 	else {
 		result.writeHead(404, {"Content-Type": "text/html; charset=UTF-8;"});
-		result.end(`api method not found`);
+		result.end(`<h2>api method not found</h2>`);
 	}	
 });
 server.listen(8080, "0.0.0.0", 511, async () => {
