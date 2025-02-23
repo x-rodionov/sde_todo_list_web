@@ -110,8 +110,8 @@ const server = http.createServer(async (request, result) => {
 		try {
 			const effect = db.prepare(
 				"UPDATE tasks SET description = ? " +
-				"WHERE complete_timestamp is NULL AND id = ?"
-			).run(description, id);
+				"WHERE id = ? AND description != ? AND complete_timestamp is NULL"
+			).run(description, id, description);
 			result.writeHead(200, {"Content-Type": "application/json"});
 			result.end(JSON.stringify({done: effect.changes === 1}));
 		} catch (error) {
