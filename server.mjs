@@ -120,6 +120,17 @@ const server = http.createServer(async (request, result) => {
 			result.end(JSON.stringify({done: false, error: error.message}));
 		}
 	}
+	else if (method === "GET" && url === "/api/v1/tasks/list") {
+		try {
+			const tasks = db.prepare("SELECT * FROM tasks").all();
+			result.writeHead(200, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({tasks}));
+		} catch (error) {
+			console.warn(error);
+			result.writeHead(500, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({error: error.message}));
+		}
+	}
 	else if (method === "OPTIONS") {
 		result.writeHead(204, {}); // no content
 		result.end();
