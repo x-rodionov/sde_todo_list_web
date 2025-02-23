@@ -45,7 +45,7 @@ const server = http.createServer(async (request, result) => {
 	const method = request.method;
 	const parts = request.url.split("?");
 	const url = parts[0];
-	const parameters = parts[1].split("&");
+	const parameters = parts[1] ? parts[1].split("&") : [];
 	// disable CORS //
 	result.setHeader('Access-Control-Allow-Origin', '*');
 	result.setHeader('Access-Control-Allow-Methods', '*');
