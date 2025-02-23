@@ -63,28 +63,25 @@ const server = http.createServer(async (request, result) => {
 		try {
 			db.prepare("INSERT INTO tasks (id, create_timestamp, description) VALUES (?, ?, ?)").
 				run(crypto.randomUUID(), (new Date()).toISOString(), description);
+			result.writeHead(200, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({done: true}));
 		} catch (error) {
 			console.warn(error);
 			result.writeHead(500, {"Content-Type": "application/json"});
 			result.end(JSON.stringify({done: false, error: error.message}));
-			return;
 		}
-		result.writeHead(200, {"Content-Type": "application/json"});
-		result.end(JSON.stringify({done: true}));
 	}
 	else if (method === "GET" && url === "/api/v1/tasks/remove") {
 		const id = decodeURIComponent(parameters[0]);
 		try {
 			const effect = db.prepare("DELETE FROM tasks WHERE id = ?").run(id);
-			console.log(effect);
+			result.writeHead(200, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({done: effect.changes === 1}));
 		} catch (error) {
 			console.warn(error);
 			result.writeHead(500, {"Content-Type": "application/json"});
 			result.end(JSON.stringify({done: false, error: error.message}));
-			return;
 		}
-		result.writeHead(200, {"Content-Type": "application/json"});
-		result.end(JSON.stringify({done: true}));
 	}
 	else if (method === "OPTIONS") {
 		result.writeHead(204, {}); // no content
