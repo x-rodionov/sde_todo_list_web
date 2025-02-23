@@ -61,10 +61,11 @@ const server = http.createServer(async (request, result) => {
 	else if (method === "GET" && url === "/api/v1/tasks/add") {
 		const description = decodeURIComponent(parameters[0]);
 		try {
+			const id = crypto.randomUUID();
 			db.prepare("INSERT INTO tasks (id, create_timestamp, description) VALUES (?, ?, ?)").
-				run(crypto.randomUUID(), (new Date()).toISOString(), description);
+				run(id, (new Date()).toISOString(), description);
 			result.writeHead(200, {"Content-Type": "application/json"});
-			result.end(JSON.stringify({done: true}));
+			result.end(JSON.stringify({done: true, id}));
 		} catch (error) {
 			console.warn(error);
 			result.writeHead(500, {"Content-Type": "application/json"});
