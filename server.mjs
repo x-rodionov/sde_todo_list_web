@@ -41,22 +41,43 @@ try {
 	process.exit(1);
 }
 const server = http.createServer(async (request, result) => {
-	if (
-		request.method === "GET" && 
-		(request.url === "/" || request.url === "/index.html")
-	) {
-		result.writeHead(200, {"Content-Type": "text/html; charset=UTF-8;"});
+	const method = request.method;
+	const parts = request.url.split("?");
+	const url = parts[0];
+	const parameters = parts[1].split("&");
+	// disable CORS //
+	result.setHeader('Access-Control-Allow-Origin', '*');
+	result.setHeader('Access-Control-Allow-Methods', '*');
+	result.setHeader('Access-Control-Allow-Headers', '*');	
+	// resource hosting //
+	if (method === "GET" && (url === "/" || url === "/index.html")) {
+		result.writeHead(200, {"Content-Type": "text/html; charset=UTF-8"});
 		result.end(
 			"<h1>Welcome To My App</h1>\n" +
 			"<p>SDE TODO List Web v1.0.0</p>"
 		);
 	}
-	else if (request.method === "OPTIONS") {
+	// tasks api //
+	else if (method === "GET" && url === "/api/v1/tasks/add") {
+		const description = decodeURIComponent(parameters[0]);
+		try {
+			db.prepare("INSERT INTO tasks (id, create_timestamp, description) VALUES (?, ?, ?)").
+				run(crypto.randomUUID(), (new Date()).toISOString(), description);
+		} catch (error) {
+			console.warn(error);
+			result.writeHead(500, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({done: false, error: error.message}));
+			return;
+		}
+		result.writeHead(200, {"Content-Type": "application/json"});
+		result.end(JSON.stringify({done: true}));
+	}
+	else if (method === "OPTIONS") {
 		result.writeHead(204, {}); // no content
 		result.end();
 	}
 	else {
-		result.writeHead(404, {"Content-Type": "text/html; charset=UTF-8;"});
+		result.writeHead(404, {"Content-Type": "text/html; charset=UTF-8"});
 		result.end(`<h2>api method not found</h2>`);
 	}	
 });
