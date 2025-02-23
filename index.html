@@ -10,11 +10,12 @@
 		<script src="index.js"></script>
 		<title>SDE TODO List Web</title>
 	</head>
-	<body>
+	<body onload="handle_body_load();">
 		<h1>Welcome To My App</h1>
 		<p>SDE TODO List Web v1.0.0</p>
-		<p style="color: silver;">
-			this is a separate resource
+		<div id="tasks_list"></div>
+		<p>
+			<button onclick="alert(1);">add task</button>
 		</p>
 		<footer>
 			<span>Copyright (c) 2025</span>

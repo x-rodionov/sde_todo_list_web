@@ -137,7 +137,7 @@ const server = http.createServer(async (request, result) => {
 		try {
 			const tasks = db.prepare("SELECT * FROM tasks").all();
 			result.writeHead(200, {"Content-Type": "application/json"});
-			result.end(JSON.stringify({tasks}));
+			result.end(JSON.stringify(tasks));
 		} catch (error) {
 			console.warn(error);
 			result.writeHead(500, {"Content-Type": "application/json"});
