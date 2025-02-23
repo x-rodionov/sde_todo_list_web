@@ -104,6 +104,22 @@ const server = http.createServer(async (request, result) => {
 			result.end(JSON.stringify({done: false, error: error.message}));
 		}
 	}
+	else if (method === "GET" && url === "/api/v1/tasks/edit") {
+		const id = decodeURIComponent(parameters[0]);
+		const description = decodeURIComponent(parameters[1]);
+		try {
+			const effect = db.prepare(
+				"UPDATE tasks SET description = ? " +
+				"WHERE complete_timestamp is NULL AND id = ?"
+			).run(description, id);
+			result.writeHead(200, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({done: effect.changes === 1}));
+		} catch (error) {
+			console.warn(error);
+			result.writeHead(500, {"Content-Type": "application/json"});
+			result.end(JSON.stringify({done: false, error: error.message}));
+		}
+	}
 	else if (method === "OPTIONS") {
 		result.writeHead(204, {}); // no content
 		result.end();
