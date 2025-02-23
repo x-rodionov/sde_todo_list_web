@@ -11,7 +11,8 @@ const db = sqlite3(db_filename, {
 });
 db.pragma(`cipher='chacha20'`);
 db.pragma(`key='${process.env["DB_PASSWORD"]}'`);
-db.pragma(`synchronous=NORMAL`); // NORMAL is a balance between speed (OFF) and safety (FULL)
+// NORMAL is a balance between speed (OFF) and safety (FULL)
+db.pragma(`synchronous=NORMAL`);
 db.pragma(`journal_mode=DELETE`);
 if (!db_file_exists) {
 	try {
@@ -62,8 +63,10 @@ const server = http.createServer(async (request, result) => {
 		const description = decodeURIComponent(parameters[0]);
 		try {
 			const id = crypto.randomUUID();
-			db.prepare("INSERT INTO tasks (id, create_timestamp, description) VALUES (?, ?, ?)").
-				run(id, (new Date()).toISOString(), description);
+			db.prepare(
+				"INSERT INTO tasks (id, create_timestamp, description) " +
+				"VALUES (?, ?, ?)"
+			).run(id, (new Date()).toISOString(), description);
 			result.writeHead(200, {"Content-Type": "application/json"});
 			result.end(JSON.stringify({done: true, id}));
 		} catch (error) {
@@ -75,7 +78,9 @@ const server = http.createServer(async (request, result) => {
 	else if (method === "GET" && url === "/api/v1/tasks/remove") {
 		const id = decodeURIComponent(parameters[0]);
 		try {
-			const effect = db.prepare("DELETE FROM tasks WHERE id = ?").run(id);
+			const effect = db.prepare(
+				"DELETE FROM tasks WHERE id = ?"
+			).run(id);
 			result.writeHead(200, {"Content-Type": "application/json"});
 			result.end(JSON.stringify({done: effect.changes === 1}));
 		} catch (error) {
