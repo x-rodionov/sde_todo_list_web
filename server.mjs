@@ -56,6 +56,21 @@ const server = http.createServer(async (request, result) => {
 		const stream = fs.createReadStream("index.html");
 		stream.pipe(result);
 	}
+	else if (method === "GET" && url === "/style.css") {
+		result.writeHead(200, {"Content-Type": "text/css; charset=UTF-8"});
+		const stream = fs.createReadStream("style.css");
+		stream.pipe(result);
+	}
+	else if (method === "GET" && url === "/index.js") {
+		result.writeHead(200, {"Content-Type": "text/javascript; charset=UTF-8"});
+		const stream = fs.createReadStream("index.js");
+		stream.pipe(result);
+	}
+	else if (method === "GET" && url === "/favicon.ico") {
+		result.writeHead(200, {"Content-Type": "image/x-icon"});
+		const stream = fs.createReadStream("favicon.ico");
+		stream.pipe(result);
+	}
 	// tasks api //
 	else if (method === "GET" && url === "/api/v1/tasks/add") {
 		const description = decodeURIComponent(parameters[0]);
