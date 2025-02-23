@@ -53,10 +53,8 @@ const server = http.createServer(async (request, result) => {
 	// resource hosting //
 	if (method === "GET" && (url === "/" || url === "/index.html")) {
 		result.writeHead(200, {"Content-Type": "text/html; charset=UTF-8"});
-		result.end(
-			"<h1>Welcome To My App</h1>\n" +
-			"<p>SDE TODO List Web v1.0.0</p>"
-		);
+		const stream = fs.createReadStream("index.html");
+		stream.pipe(result);
 	}
 	// tasks api //
 	else if (method === "GET" && url === "/api/v1/tasks/add") {
@@ -137,7 +135,8 @@ const server = http.createServer(async (request, result) => {
 	}
 	else {
 		result.writeHead(404, {"Content-Type": "text/html; charset=UTF-8"});
-		result.end(`<h2>api method not found</h2>`);
+		const stream = fs.createReadStream("404.html");
+		stream.pipe(result);
 	}	
 });
 const port = parseInt('8080');
