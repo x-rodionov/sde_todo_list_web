@@ -81,6 +81,7 @@ const server = http.createServer(async (request, result) => {
 		result.end(`<h2>api method not found</h2>`);
 	}	
 });
-server.listen(8080, "0.0.0.0", 511, async () => {
+const port = parseInt('8080');
+server.listen(port, "0.0.0.0", 511, async () => {
 	console.log("ready!")
 });
