@@ -24,14 +24,14 @@ function add_task(list, item) {
 	p.append(button);
 	list.append(p);
 }
-window['handle_body_load'] = async () => {
+async function handle_body_load() {
 	const response = await fetch(`/api/v1/tasks/list`);
 	const tasks = await response.json();
 	const list = document.getElementById("tasks_list");
 	for (let i = 0; i < tasks.length; ++i)
 		add_task(list, tasks[i]);
 }
-window['handle_add_click'] = async () => {
+async function handle_add_click() {
 	const text = prompt("description");
 	if (!text)
 		return;
